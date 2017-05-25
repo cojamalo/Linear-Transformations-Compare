@@ -1,0 +1,207 @@
+---
+title: "Linear Transformations for the Independent Variable"
+output: 
+  html_document: 
+    toc: true
+---
+
+```{r, message=FALSE, warning=FALSE}
+library(gridExtra)
+library(ggplot2)
+library(dplyr)
+```
+
+## Information
+
+The following plots were created on May 25, 2017 to understand linear transformations of the independent variable to to better fit linear relationships to non-linear data.
+
+## Positive Values
+
+### Linear Plot
+
+```{r}
+set.seed(123)
+lin_data <- data.frame(x = runif(1000, 0, 100))
+lin_data$y <- rnorm(1000, 10, 10) + 1.2 * lin_data$x
+```
+
+```{r}
+mid <- ggplot(lin_data, aes(x,y)) + 
+    geom_point() + 
+    geom_smooth(method="loess", span = 0.3,color = "red") + 
+    geom_smooth(method="lm", color = "blue") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    labs(title = "y = x")
+```
+
+### Linear-Reciprical
+
+```{r}
+# Left
+left_data <- data.frame(x = lin_data$x)
+left_data$y <- left_data$x # Change here
+left_data$y <- left_data$y + rnorm(1000, 0.25*max(left_data$y), 0.125*max(left_data$y))
+
+line <- ggplot(left_data, aes(x,y)) + 
+    geom_point() + 
+    geom_smooth(method="loess", span = 0.3,color = "red") + 
+    geom_smooth(method="lm", color = "blue") +
+    theme(plot.title = element_text(hjust = 0.8)) +
+    labs(title = "y = x")
+
+# Right
+right_data <- data.frame(x = lin_data$x)
+right_data$y <- 1/right_data$x # Change here
+right_data$y <- right_data$y + rnorm(1000, 0.25*max(right_data$y), 0.125*max(right_data$y))
+recip <- ggplot(right_data, aes(x,y)) + 
+    geom_point() + 
+    geom_smooth(method="loess", span = 0.3,color = "red") + 
+    geom_smooth(method="lm", color = "blue") +
+    labs(title = "y = 1/(x) \n <---1/(x) Transform----")
+```
+
+```{r, fig.width = 10}
+grid.arrange(line,mid,recip, ncol = 3)
+```
+
+### Logistic-Exponential Regression
+
+```{r fig.width = 9}
+# Left 
+left_data <- data.frame(x = lin_data$x)
+left_data$y <- log(left_data$x) 
+left_data$y <- left_data$y + rnorm(1000, 0.25*max(left_data$y), 0.125*max(left_data$y))
+
+log <- ggplot(left_data, aes(x,y)) + 
+    geom_point() + 
+    geom_smooth(method="loess", span = 0.3,color = "red") + 
+    geom_smooth(method="lm", color = "blue") +
+    theme(plot.title = element_text(hjust = 0.8)) +
+    labs(title = "y = log(x) \n ---Log(x) Transform--->")
+
+# Right 
+right_data <- data.frame(x = lin_data$x)
+right_data$y <- exp(right_data$x)
+right_data$y <- right_data$y + rnorm(1000, 0.25*max(right_data$y), 0.125*max(right_data$y))
+exp <- ggplot(right_data, aes(x,y)) + 
+    geom_point() + 
+    geom_smooth(method="loess", span = 0.3,color = "red") + 
+    geom_smooth(method="lm", color = "blue") +
+    labs(title = "y = e^x \n <---Exp(x) Transform----")
+```
+
+```{r, fig.width = 10}
+grid.arrange(log,mid,exp, ncol = 3)
+```
+
+### Square-Square Root
+
+```{r}
+# Left 
+left_data <- data.frame(x = lin_data$x)
+left_data$y <- left_data$x^2 # Change here
+left_data$y <- left_data$y + rnorm(1000, 0.25*max(left_data$y), 0.125*max(left_data$y))
+
+square <- ggplot(left_data, aes(x,y)) + 
+    geom_point() + 
+    geom_smooth(method="loess", span = 0.3,color = "red") + 
+    geom_smooth(method="lm", color = "blue") +
+    theme(plot.title = element_text(hjust = 0.8)) +
+    labs(title = "y = x^2 \n ---x^2 Transform--->")
+
+# Right 
+right_data <- data.frame(x = lin_data$x)
+right_data$y <- sqrt(right_data$x) # Change here
+right_data$y <- right_data$y + rnorm(1000, 0.25*max(right_data$y), 0.125*max(right_data$y))
+sqrt <- ggplot(right_data, aes(x,y)) + 
+    geom_point() + 
+    geom_smooth(method="loess", span = 0.3,color = "red") + 
+    geom_smooth(method="lm", color = "blue") +
+    labs(title = "y = sqrt(x) \n <---sqrt(x) Transform----")
+```
+
+```{r, fig.width = 10}
+grid.arrange(square,mid,sqrt, ncol = 3)
+```
+
+### Cube-Cubic Root
+
+```{r}
+# Left 
+left_data <- data.frame(x = lin_data$x)
+left_data$y <- left_data$x^3 # Change here
+left_data$y <- left_data$y + rnorm(1000, 0.25*max(left_data$y), 0.125*max(left_data$y))
+
+cube <- ggplot(left_data, aes(x,y)) + 
+    geom_point() + 
+    geom_smooth(method="loess", span = 0.3,color = "red") + 
+    geom_smooth(method="lm", color = "blue") +
+    theme(plot.title = element_text(hjust = 0.8)) +
+    labs(title = "y = x^3 \n ---x^3 Transform--->")
+
+# Right 
+right_data <- data.frame(x = lin_data$x)
+right_data$y <- right_data$x^(1/3) # Change here
+right_data$y <- right_data$y + rnorm(1000, 0.25*max(right_data$y), 0.125*max(right_data$y))
+cubic_root <- ggplot(right_data, aes(x,y)) + 
+    geom_point() + 
+    geom_smooth(method="loess", span = 0.3,color = "red") + 
+    geom_smooth(method="lm", color = "blue") +
+    labs(title = "y = x^(1/3) \n <---x^(1/3) Transform----")
+```
+
+```{r, fig.width = 10}
+grid.arrange(cube,mid,cubic_root, ncol = 3)
+```
+
+
+
+### Sin-Cos
+
+```{r}
+# Left 
+left_data <- data.frame(x = lin_data$x)
+left_data$y <- sin(left_data$x) # Change here
+left_data$y <- left_data$y + rnorm(1000, 0.25*max(left_data$y), 0.125*max(left_data$y))
+
+sin <- ggplot(left_data, aes(x,y)) + 
+    geom_point() + 
+    geom_smooth(method="loess", span = 0.3, color = "red") + 
+    geom_smooth(method="lm", color = "blue") +
+    theme(plot.title = element_text(hjust = 0.8)) +
+    labs(title = "y = sin(x) \n ---sin(x) Transform--->")
+
+# Right 
+right_data <- data.frame(x = lin_data$x)
+right_data$y <- cos(right_data$x) # Change here
+right_data$y <- right_data$y + rnorm(1000, 0.25*max(right_data$y), 0.125*max(right_data$y))
+cos <- ggplot(right_data, aes(x,y)) + 
+    geom_point() + 
+    geom_smooth(method="loess", span = 0.3, color = "red") + 
+    geom_smooth(method="lm", color = "blue") +
+    labs(title = "y = cos(x) \n <---cos(x) Transform----")
+```
+
+```{r test, fig.width = 10}
+grid.arrange(sin,mid,cos, ncol = 3)
+```
+
+### Comparison Plot
+```{r fig.height=15, fig.width=9}
+one <- arrangeGrob(line,mid,recip, ncol = 3)
+two <- arrangeGrob(log,mid,exp, ncol = 3)
+three <- arrangeGrob(square,mid,sqrt, ncol = 3)
+four <- arrangeGrob(cube,mid,cubic_root, ncol = 3)
+five <- arrangeGrob(sin,mid,cos, ncol = 3)
+grid.arrange(one, two, three, four, five,ncol = 1)
+```
+
+## Negative Values
+
+### Valid Transforms:
+
+* 1/x
+* exp(x)
+* x^2 - symmetric chape to positive
+* x^3 - inverted shape to positive
+* sin/cos 
